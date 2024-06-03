@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/src/message.scss'
 
@@ -38,93 +38,88 @@ import { getRecycleList } from '@/management/api/analysis'
 import DataTable from '../components/DataTable.vue'
 import { noDataConfig } from '../config'
 
-export default {
-  name: 'AnalysisPage',
-  data() {
-    return {
-      mainTableLoading: false,
-      tableData: {
-        total: 0,
-        listHead: [],
-        listBody: []
-      },
-      noDataConfig,
-      currentPage: 1,
-      isShowOriginData: false,
-      tmpIsShowOriginData: false
-    }
-  },
-  computed: {},
-  created() {
-    this.init()
-  },
-  methods: {
-    async init() {
-      if (!this.$route.params.id) {
-        ElMessage.error('没有传入问卷参数~')
-        return
-      }
-      this.mainTableLoading = true
-      try {
-        const res = await getRecycleList({
-          page: this.currentPage,
-          surveyId: this.$route.params.id,
-          isDesensitive: !this.tmpIsShowOriginData // 发起请求的时候，isShowOriginData还没改变，暂存了一个字段
-        })
+import { reactive, toRefs } from 'vue'
+import { useRoute } from 'vue-router'
 
-        if (res.code === 200) {
-          const listHead = this.formatHead(res.data.listHead)
-          this.tableData = { ...res.data, listHead }
-          this.mainTableLoading = false
-        }
-      } catch (error) {
-        ElMessage.error('查询回收数据失败，请重试')
-      }
-    },
-    handleCurrentChange(current) {
-      if (this.mainTableLoading) {
-        return
-      }
-      this.currentPage = current
-      this.init()
-    },
-    formatHead(listHead = []) {
-      const head = []
+const dataTableState = reactive({
+  mainTableLoading: false,
+  tableData: {
+    total: 0,
+    listHead: [],
+    listBody: []
+  },
+  currentPage: 1,
+  isShowOriginData: false,
+  tmpIsShowOriginData: false
+})
 
-      listHead.forEach((headItem) => {
+const { mainTableLoading, tableData, isShowOriginData } = toRefs(dataTableState)
+
+const route = useRoute()
+
+const formatHead = (listHead) => {
+  const head = []
+
+  listHead.forEach((headItem) => {
+    head.push({
+      field: headItem.field,
+      title: headItem.title
+    })
+
+    if (headItem.othersCode?.length) {
+      headItem.othersCode.forEach((item) => {
         head.push({
-          field: headItem.field,
-          title: headItem.title
+          field: item.code,
+          title: `${headItem.title}-${item.option}`
         })
-
-        if (headItem.othersCode?.length) {
-          headItem.othersCode.forEach((item) => {
-            head.push({
-              field: item.code,
-              title: `${headItem.title}-${item.option}`
-            })
-          })
-        }
       })
-
-      return head
-    },
-    async onIsShowOriginChange(data) {
-      if (this.mainTableLoading) {
-        return
-      }
-      // console.log(data)
-      this.tmpIsShowOriginData = data
-      await this.init()
-      this.isShowOriginData = data
     }
-  },
+  })
 
-  components: {
-    DataTable,
-    EmptyIndex
+  return head
+}
+
+const onIsShowOriginChange = async (data) => {
+  if (dataTableState.mainTableLoading) {
+    return
+  }
+  dataTableState.tmpIsShowOriginData = data
+  await init()
+  dataTableState.isShowOriginData = data
+}
+
+const handleCurrentChange = async (page) => {
+  if (dataTableState.mainTableLoading) {
+    return
+  }
+  dataTableState.currentPage = page
+  await init()
+}
+
+const init = async () => {
+  if (!route.params.id) {
+    ElMessage.error('没有传入问卷参数~')
+    return
+  }
+  dataTableState.mainTableLoading = true
+  try {
+    const res = await getRecycleList({
+      page: dataTableState.currentPage,
+      surveyId: route.params.id,
+      isDesensitive: !dataTableState.tmpIsShowOriginData // 发起请求的时候，isShowOriginData还没改变，暂存了一个字段
+    })
+
+    if (res.code === 200) {
+      const listHead = formatHead(res.data.listHead)
+      dataTableState.tableData = { ...res.data, listHead }
+      dataTableState.mainTableLoading = false
+    }
+  } catch (error) {
+    ElMessage.error('查询回收数据失败，请重试')
   }
 }
+
+init()
 </script>
 
 <style lang="scss" scoped>

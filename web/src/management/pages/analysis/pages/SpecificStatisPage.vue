@@ -27,9 +27,9 @@ const initData = async () => {
     const res = await getSpecificStatisList({
       surveyId: route.params.id
     })
-    data.value = res.data
+    data.value = res?.data || []
   } catch (error) {
-    ElMessage.error('查询回收数据失败，请重试')
+    ElMessage.error(error?.message || '查询回收数据失败，请重试')
   }
 }
 
