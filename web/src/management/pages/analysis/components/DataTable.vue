@@ -62,6 +62,10 @@ const props = defineProps({
   },
   mainTableLoading: {
     type: Boolean
+  },
+  tableMinHeight: {
+    type: String,
+    default: '620px'
   }
 })
 const popoverRefMap = ref({})
@@ -94,7 +98,7 @@ const onPopoverRefOver = (scope, type) => {
   position: relative;
   width: 100%;
   padding-bottom: 20px;
-  min-height: 620px;
+  min-height: v-bind('tableMinHeight');
   background: #fff;
   padding: 10px 20px;
   .table-border {

@@ -92,11 +92,34 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/survey/:id/analysis',
     name: 'analysisPage',
+    redirect: {
+      name: 'DataTable'
+    },
     meta: {
       needLogin: true,
       premissions: [SurveyPermissions.DataManage]
     },
-    component: () => import('../pages/analysis/AnalysisPage.vue')
+    component: () => import('../pages/analysis/AnalysisPage.vue'),
+    children: [
+      {
+        path: 'dataTable',
+        name: 'DataTable',
+        meta: {
+          needLogin: true,
+          premissions: [SurveyPermissions.DataManage]
+        },
+        component: () => import('../pages/analysis/pages/DataTablePage.vue')
+      },
+      {
+        path: 'specificStatis',
+        name: 'SpecificStatis',
+        meta: {
+          needLogin: true,
+          premissions: [SurveyPermissions.DataManage]
+        },
+        component: () => import('../pages/analysis/pages/SpecificStatisPage.vue')
+      },
+    ]
   },
   {
     path: '/survey/:id/publish',
