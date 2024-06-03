@@ -17,7 +17,7 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
   (response) => {
-    if (response.status !== 200) {
+    if (response.status !== CODE_MAP.SUCCESS) {
       throw new Error('http请求出错')
     }
     const res = response.data

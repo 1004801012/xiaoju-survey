@@ -8,6 +8,8 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/src/message.scss'
 import SpecificItem from '../components/SpecificItem.vue'
 import { noDataConfig } from '../config'
 
@@ -21,10 +23,14 @@ const route = useRoute()
 const data = ref([])
 
 const initData = async () => {
-  const res = await getSpecificStatisList({
-    surveyId: route.params.id
-  })
-  data.value = res.data
+  try {
+    const res = await getSpecificStatisList({
+      surveyId: route.params.id
+    })
+    data.value = res.data
+  } catch (error) {
+    ElMessage.error('查询回收数据失败，请重试')
+  }
 }
 
 onMounted(initData)

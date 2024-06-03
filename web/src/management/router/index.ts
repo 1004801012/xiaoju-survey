@@ -118,7 +118,7 @@ const routes: RouteRecordRaw[] = [
           premissions: [SurveyPermissions.DataManage]
         },
         component: () => import('../pages/analysis/pages/SpecificStatisPage.vue')
-      },
+      }
     ]
   },
   {

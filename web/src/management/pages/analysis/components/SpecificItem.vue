@@ -18,11 +18,7 @@
 <script setup>
 import { reactive, toRefs, defineProps, computed, watch, onMounted } from 'vue'
 import DataTable from './DataTable.vue'
-import {
-  specificItemListHead,
-  summaryType,
-  summaryItemConfig
-} from '../config'
+import { specificItemListHead, summaryType, summaryItemConfig } from '../config'
 import useCharts from '@/management/hooks/useCharts'
 import useSpecificItemChart from '../hooks/useSpecificItemChart'
 import { filterXSS } from '@/common/xss'
@@ -98,8 +94,10 @@ const specificItemState = reactive({
 
 const { tableData, tableMinHeight } = toRefs(specificItemState)
 
-
-const { chart, chartType, chartData, currentTypeIndex } = useSpecificItemChart({ questionType, data: props?.specificData?.data})
+const { chart, chartType, chartData } = useSpecificItemChart({
+  questionType,
+  data: props?.specificData?.data
+})
 
 onMounted(() => {
   // 需要获取图表dom，所以得在mounted中执行

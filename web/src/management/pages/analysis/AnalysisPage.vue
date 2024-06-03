@@ -2,15 +2,19 @@
   <div class="analysis-page">
     <leftMenu class="left"></leftMenu>
     <div class="right">
-
       <div class="analysis-tabs">
-        <router-link v-for="item in analysisType" class="analysis-tabs__item" :key="item.value" :to="{ name: item.value }">
+        <router-link
+          v-for="item in analysisType"
+          class="analysis-tabs__item"
+          :key="item.value"
+          :to="{ name: item.value }"
+        >
           <i class="iconfont" :class="item.icon"></i>
           <span>{{ item.label }}</span>
         </router-link>
       </div>
       <div class="content-wrapper">
-        <router-view/>
+        <router-view />
       </div>
     </div>
   </div>
@@ -19,7 +23,6 @@
 <script setup>
 import LeftMenu from '@/management/components/LeftMenu.vue'
 import { analysisType } from './config'
-
 </script>
 
 <style lang="scss" scoped>

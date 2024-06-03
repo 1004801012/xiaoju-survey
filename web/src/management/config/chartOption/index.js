@@ -1,6 +1,6 @@
-import pie from "./pie";
-import bar from "./bar";
-import gauge from "./gauge";
+import pie from './pie'
+import bar from './bar'
+import gauge from './gauge'
 
 export const getOption = {
   pie,

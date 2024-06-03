@@ -1,6 +1,6 @@
-import { ref, computed } from "vue"
-import { questionChartsConfig } from "../config"
-import dataFormateConfig from "../config/dataFormateConfig"
+import { ref, computed } from 'vue'
+import { questionChartsConfig } from '../config'
+import dataFormateConfig from '../config/dataFormateConfig'
 
 /**
  * @description: 分题统计图表

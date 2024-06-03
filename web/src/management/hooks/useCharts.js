@@ -2,7 +2,6 @@ import * as echarts from 'echarts'
 import useResizeObserver from './useResizeObserver'
 import { getOption } from '@/management/config/chartOption'
 
-
 /**
  * 绘制图表
  * @param {Object} el
